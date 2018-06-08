@@ -1,0 +1,29 @@
+<idea-plugin>
+    <id>com.arman.plugins.marktext</id>
+    <name>MarkAsPlainText</name>
+    <version>1.0</version>
+
+    <description><![CDATA[
+    Mark a file as Plain Text.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="173.0"/>
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <action id="MarkPlainText" class="com.arman.plugins.marktext.MarkPlainText" text="Mark as Plain Text"
+                description="Mark this file as Plain Text">
+            <add-to-group group-id="MarkFileAs" anchor="first"/>
+        </action>
+        <action id="UnMarkPlainText" class="com.arman.plugins.marktext.UnMarkPlainText" text="Unmark as Plain Text"
+                description="Unmark this Plain Text file">
+            <add-to-group group-id="MarkFileAs" anchor="first"/>
+        </action>
+    </actions>
+
+</idea-plugin>
