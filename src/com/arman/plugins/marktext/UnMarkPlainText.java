@@ -20,9 +20,9 @@ public class UnMarkPlainText extends AnAction {
     @Override
     public void update(AnActionEvent e) {
         this.project = (Project) e.getDataContext().getData(CommonDataKeys.PROJECT.getName());
-        VirtualFile file = (VirtualFile) e.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE.getName());
+        VirtualFile[] files = (VirtualFile[]) e.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE_ARRAY.getName());
         Presentation presentation = e.getPresentation();
-        if (file != null && file.exists() && EnforcedPlainTextFileTypeManager.getInstance().isMarkedAsPlainText(file)) {
+        if (files != null && files[0].exists() && EnforcedPlainTextFileTypeManager.getInstance().isMarkedAsPlainText(files[0])) {
             presentation.setVisible(true);
             presentation.setIcon(EnforcedPlainTextFileTypeFactory.ENFORCED_PLAIN_TEXT_ICON);
         } else {
@@ -33,15 +33,22 @@ public class UnMarkPlainText extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         this.project = (Project) e.getDataContext().getData(CommonDataKeys.PROJECT.getName());
-        VirtualFile plainFile = (VirtualFile) e.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE.getName());
-        if (plainFile != null && plainFile.exists()) {
-            unmark(plainFile);
+        VirtualFile[] files = (VirtualFile[]) e.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE_ARRAY.getName());
+        if (files != null && files[0].exists()) {
+            for (VirtualFile file : files) {
+                unmark(file);
+            }
         }
     }
 
     private boolean unmark(VirtualFile file) {
-        if (!file.exists() || file.isDirectory()) {
+        if (!file.exists()) {
             return false;
+        }
+        if (file.isDirectory()) {
+            for (VirtualFile f : file.getChildren()) {
+                unmark(f);
+            }
         }
         EnforcedPlainTextFileTypeManager typeManager = EnforcedPlainTextFileTypeManager.getInstance();
         if (typeManager != null && typeManager.isMarkedAsPlainText(file)) {
