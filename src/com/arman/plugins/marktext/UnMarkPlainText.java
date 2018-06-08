@@ -9,6 +9,8 @@ import com.intellij.openapi.file.exclude.EnforcedPlainTextFileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import static com.arman.plugins.marktext.Util.containsPlainTextFile;
+
 public class UnMarkPlainText extends AnAction {
 
     private Project project;
@@ -22,7 +24,8 @@ public class UnMarkPlainText extends AnAction {
         this.project = (Project) e.getDataContext().getData(CommonDataKeys.PROJECT.getName());
         VirtualFile[] files = (VirtualFile[]) e.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE_ARRAY.getName());
         Presentation presentation = e.getPresentation();
-        if (files != null && files[0].exists() && EnforcedPlainTextFileTypeManager.getInstance().isMarkedAsPlainText(files[0])) {
+        System.out.println(files[0].getName());
+        if (files != null && files[0].exists() && containsPlainTextFile(files[0])) {
             presentation.setVisible(true);
             presentation.setIcon(EnforcedPlainTextFileTypeFactory.ENFORCED_PLAIN_TEXT_ICON);
         } else {
